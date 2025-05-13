@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIT 100 Quiz - Engaging Style</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+
+        :root {
+            --duo-green: #58cc02;
+            --duo-green-dark: #4aa502;
+            --duo-red: #ff4b4b;
+            --duo-red-dark: #d94040;
+            --duo-blue: #1cb0f6;
+            --duo-blue-dark: #168ac5;
+            --duo-yellow: #ffc800;
+            --duo-grey-light: #e5e5e5;
+            --duo-grey-medium: #afafaf;
+            --duo-grey-dark: #4b4b4b;
+            --duo-text-light: #ffffff;
+            --duo-text-dark: #3c3c3c;
+            --font-family-primary: 'Nunito', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family-primary);
+            background-color: #f7f7f7;
+            color: var(--duo-text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top for longer content */
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--duo-text-light);
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--duo-grey-light);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: var(--duo-text-dark);
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .game-stats {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .lives, .score-container {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--duo-grey-dark);
+        }
+
+        .heart, .score-icon {
+            font-size: 24px;
+            margin-right: 8px;
+        }
+        .heart { color: var(--duo-red); }
+        .score-icon { color: var(--duo-yellow); }
+
+
+        .progress-bar {
+            width: 100%;
+            background-color: var(--duo-grey-light);
+            border-radius: 10px;
+            height: 20px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress {
+            background-color: var(--duo-blue);
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.3s ease-in-out;
+        }
+
+        #questionContainer {
+            margin-bottom: 20px;
+        }
+
+        .question h3 {
+            font-size: 22px;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            color: var(--duo-text-dark);
+        }
+
+        .option {
+            display: block;
+            width: 100%;
+            background-color: var(--duo-text-light);
+            border: 2px solid var(--duo-grey-light);
+            color: var(--duo-text-dark);
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-family: var(--font-family-primary);
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
+            font-weight: 700;
+        }
+
+        .option:hover:not(:disabled) {
+            background-color: #f0f0f0;
+            border-color: var(--duo-grey-medium);
+        }
+        .option:active:not(:disabled) {
+             transform: translateY(1px);
+         }
+
+        .option.correct {
+            background-color: #d7ffb8; /* Light green */
+            border-color: var(--duo-green);
+            color: var(--duo-green-dark);
+        }
+        .option.correct::before {
+             content: '✔ ';
+             font-weight: bold;
+         }
+
+        .option.incorrect {
+            background-color: #ffd6d6; /* Light red */
+            border-color: var(--duo-red);
+            color: var(--duo-red-dark);
+        }
+          .option.incorrect::before {
+             content: '✘ ';
+             font-weight: bold;
+         }
+
+        .option:disabled {
+             cursor: not-allowed;
+             opacity: 0.7;
+         }
+
+
+        .feedback {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 25px; /* Reserve space */
+        }
+
+        .streak-bonus {
+             font-size: 16px;
+             color: var(--duo-yellow);
+             font-weight: bold;
+             min-height: 20px; /* Reserve space */
+         }
+
+        .action-button {
+            background-color: var(--duo-blue);
+            color: var(--duo-text-light);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-family: var(--font-family-primary);
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            font-weight: 700;
+            box-shadow: 0 4px 0 var(--duo-blue-dark); /* 3D effect */
+            margin-top: 10px;
+        }
+
+        .action-button:hover:not(:disabled) {
+            background-color: var(--duo-blue-dark);
+        }
+        .action-button:active:not(:disabled) {
+             transform: translateY(2px);
+             box-shadow: 0 2px 0 var(--duo-blue-dark);
+         }
+
+        .action-button:disabled {
+            background-color: var(--duo-grey-medium);
+            cursor: not-allowed;
+            box-shadow: 0 4px 0 #909090;
+        }
+
+        #nextButton {
+             background-color: var(--duo-green);
+             box-shadow: 0 4px 0 var(--duo-green-dark);
+         }
+         #nextButton:hover:not(:disabled) {
+            background-color: var(--duo-green-dark);
+         }
+          #nextButton:active:not(:disabled) {
+             transform: translateY(2px);
+             box-shadow: 0 2px 0 var(--duo-green-dark);
+         }
+
+
+        .quiz-end {
+            display: none; /* Initially hidden */
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .quiz-end .badge {
+            font-size: 80px; /* Larger badge */
+            margin-bottom: 20px;
+            color: var(--duo-yellow);
+        }
+
+        .quiz-end h2 {
+            font-size: 32px;
+            color: var(--duo-text-dark);
+            margin-bottom: 15px;
+        }
+
+        .quiz-end p {
+            font-size: 18px;
+            color: var(--duo-grey-dark);
+            margin-bottom: 10px;
+        }
+        .quiz-end p strong {
+             color: var(--duo-text-dark);
+             font-weight: 700;
+         }
+
+        .xp-bar {
+             width: 80%;
+             background-color: var(--duo-grey-light);
+             border-radius: 10px;
+             height: 25px;
+             margin: 20px 0;
+             overflow: hidden;
+         }
+         .xp-progress {
+             background-color: var(--duo-yellow);
+             height: 100%;
+             width: 0%;
+             border-radius: 10px;
+             transition: width 0.5s ease-in-out;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             color: var(--duo-text-dark);
+             font-weight: bold;
+         }
+
+        #restartQuiz {
+             background-color: var(--duo-blue);
+             box-shadow: 0 4px 0 var(--duo-blue-dark);
+         }
+         #restartQuiz:hover {
+             background-color: var(--duo-blue-dark);
+         }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>BIT 100 Quiz</h1>
+            <div class="game-stats">
+                <div class="lives">
+                    </div>
+                <div class="score-container">
+                    <span class="score-icon">🏆</span>
+                    <span id="scoreDisplay">0</span> XP
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
+        </div>
+
+        <div id="questionContainer">
+            <div class="question" id="currentQuestion">
+                <h3 id="questionText">Loading question...</h3>
+                <div class="feedback" id="feedback"></div>
+                <div class="streak-bonus" id="streakBonus"></div>
+            </div>
+        </div>
+
+        <button type="button" id="nextButton" class="action-button" disabled>Continue</button>
+
+        <div class="quiz-end" id="quizEnd">
+            <div class="badge">🏆</div>
+            <h2>Quiz Completed!</h2>
+            <p>Your final score: <strong id="finalScore">0</strong> XP</p>
+            <div class="xp-bar">
+                <div class="xp-progress" id="xpProgress">0%</div>
+            </div>
+            <p><strong id="correctAnswers">0</strong> out of <strong id="totalQuestions">0</strong> questions correct</p>
+            <button type="button" id="restartQuiz" class="action-button">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Store the original quiz data separately
+            const originalQuizData = [
+                // QUESTION ONE (Section A - Compulsory)
+                {
+                    question: "Q1.1: Which of the following best describes an electronic computer as per its fundamental operations?",
+                    options: [
+                        "A device that only performs calculations.",
+                        "A machine that processes data based on a set of instructions.",
+                        "A system solely for storing information.",
+                        "An electromechanical device for typing documents."
+                    ],
+                    correctAnswer: 1 // Index of the correct option in the options array
+                },
+                {
+                    question: "Q1.2: Which of the following is a primary reason why computers are often preferred over humans for certain tasks?",
+                    options: [
+                        "They can perform complex emotional reasoning.",
+                        "They are inherently creative and innovative.",
+                        "They can process information at extremely high speeds with accuracy.",
+                        "They do not require any form of energy to operate."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q1.3: When preparing an enquiry to suppliers for a personal computer, which of these is a key logical feature to specify?",
+                    options: [
+                        "Color of the casing",
+                        "Type and speed of the CPU (Processor)",
+                        "Brand of the mouse pad",
+                        "Length of the power cable"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q1.4: Which factor can significantly hinder the evolution of computers?",
+                    options: [
+                        "Rapid innovation in software development.",
+                        "Limitations in power supply technology and battery life.",
+                        "Decreasing cost of hardware components.",
+                        "Increased global internet connectivity."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q1.5: What is a potential advantage of 'over-computerization' in some contexts?",
+                    options: [
+                        "Increased job security for manual laborers.",
+                        "Reduced efficiency due to system complexity.",
+                        "Enhanced data analysis capabilities leading to better insights.",
+                        "Greater reliance on human intuition for decision-making."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q1.6a: In the data hierarchy, what is a 'Database'?",
+                    options: [
+                        "A single file containing unorganized data.",
+                        "A collection of related data organized for easy access, retrieval, and use.",
+                        "A software application used for creating documents.",
+                        "A physical storage device like a hard drive."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q1.6b: What is a 'Database Management System (DBMS)'?",
+                    options: [
+                        "The raw data itself stored in tables.",
+                        "A hardware component that stores the database.",
+                        "Software that allows users to create, maintain, and control access to a database.",
+                        "A programming language used to write database applications."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q1.6c: What is 'Database Software' generally referred to as?",
+                    options: [
+                        "The operating system managing the computer.",
+                        "The collection of DBMS, application programs, and user interfaces.",
+                        "Only the application programs that access the database.",
+                        "A utility for backing up data files."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q1.7a: What is the binary equivalent of the decimal value 1000?",
+                    options: ["1111101000", "1111100111", "1000", "001111101000 (Incorrect interpretation of 1,0,0,0)"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q1.7b: What is the binary equivalent of the decimal value 10?",
+                    options: ["1010", "0010", "1100", "1001"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q1.7c: What is the binary equivalent of the decimal value 11?",
+                    options: ["1011", "1101", "1001", "1110"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q1.7d: What is the binary equivalent of the decimal value 13?",
+                    options: ["1011", "1101", "1110", "1100"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q1.7e: What is the binary equivalent of the decimal value 14?",
+                    options: ["1110", "1101", "1011", "1111"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q1.7f: What is the binary equivalent of the decimal value 15?",
+                    options: ["1111", "1010", "1100", "1000"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q1.8a: What is the decimal equivalent of the binary value 11111111?",
+                    options: ["255", "127", "256", "511"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q1.8b: What is the decimal equivalent of the binary value 10111111?",
+                    options: ["191", "127", "200", "190"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q1.8c: What is the decimal equivalent of the binary value 11101111?",
+                    options: ["239", "223", "240", "238"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q1.8d: What is the decimal equivalent of the binary value 11110111?",
+                    options: ["247", "230", "250", "245"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q1.8e: What is the decimal equivalent of the binary value 11111011?",
+                    options: ["251", "248", "252", "250"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q2.1a: What does 'IoT' stand for in Information Technology?",
+                    options: ["Internet of Things", "Input Output Technology", "Internal Object Tracker", "International Office Tasks"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q2.1b: What does 'GPS' stand for?",
+                    options: ["Global Positioning System", "General Processing Service", "Global Paging System", "Graphical Performance Software"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q2.1c: What does 'GPRS' stand for?",
+                    options: ["General Packet Radio Service", "Global Paging Radio System", "General Processing Register Service", "Graphical Performance Rendering System"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q2.1d: What does 'SMS' stand for in mobile technology?",
+                    options: ["Short Message Service", "Speedy Mail System", "Synchronous Mobile Service", "System Management Software"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q2.1e: What does 'GSM' stand for in mobile communications?",
+                    options: ["Global System for Mobile Communications", "General Service Model", "Geo-Stationary Mobile", "Gradual System Migration"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q2.2: Which of the following is considered a branch of Information Technology?",
+                    options: [
+                        "Mechanical Engineering",
+                        "Cybersecurity",
+                        "Agricultural Science",
+                        "Theoretical Physics"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q2.3: Which of these is a vital non-technical quality for an IT expert?",
+                    options: [
+                        "Proficiency in a specific programming language",
+                        "Ability to configure network routers",
+                        "Strong problem-solving and analytical skills",
+                        "Knowledge of database administration"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q3.1: Apart from MS Word, which software is suitable for preparing reports, memos, and letters?",
+                    options: ["Adobe Photoshop", "Google Docs", "AutoCAD", "MS Excel"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q3.2: Which software is commonly used for creating business presentations?",
+                    options: ["Notepad", "Microsoft PowerPoint / Google Slides", "QuickBooks", "Oracle Database"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q3.3: Which software is primarily used for organizing, analyzing, and manipulating data in a tabular format?",
+                    options: ["Mozilla Firefox", "Adobe Acrobat Reader", "Microsoft Excel / Google Sheets", "WinRAR"],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q3.4: What type of software enables users to store, organize, manage, and retrieve data in a structured manner?",
+                    options: ["Web Browser", "Operating System", "Database Management System (DBMS)", "Graphics Editor"],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q3.5: Software that models real-world processes or systems to simulate their behavior is known as:",
+                    options: ["Antivirus software", "Simulation software", "File compression utility", "Word processor"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q3.6: Software that mimics the functions of one computer system on another is called:",
+                    options: ["A compiler", "An emulator or virtual machine software", "A device driver", "A web server"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q3.7: Which software application allows users to access and interact with information on the World Wide Web?",
+                    options: ["Email client", "Web browser (e.g., Chrome, Firefox)", "FTP client", "Spreadsheet software"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q3.8: What is a specialized software component allowing an OS to communicate with a specific hardware device?",
+                    options: ["A system utility", "An application program", "A device driver", "A software license"],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q3.9: What software acts as an interface between computer hardware and the user, managing resources?",
+                    options: ["Firmware", "Application Software", "Operating System (OS)", "Utility Software"],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q3.10: Software designed for specific tasks to enhance computer system performance and management is called:",
+                    options: ["Malware", "Utility software", "Productivity suite", "Programming language"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q4.1: Which of the following is a 'type' or classification of Operating System based on its interface?",
+                    options: [
+                        "Gaming OS",
+                        "Command-Line Interface (CLI) OS",
+                        "Scientific OS",
+                        "Business OS"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q4.2: Which of the following is an example of an Operating System?",
+                    options: [
+                        "Microsoft Office",
+                        "Linux (e.g., Ubuntu, Fedora)",
+                        "Adobe Photoshop",
+                        "Google Chrome"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q4.3: Which of the following is a common way to optimize the functionality of an Operating System?",
+                    options: [
+                        "Installing as many applications as possible.",
+                        "Regularly defragmenting the hard drive (for HDDs).",
+                        "Disabling all security updates.",
+                        "Increasing screen brightness to maximum."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q4.4a: What is 'Defragmentation' in the context of an OS?",
+                    options: [
+                        "Deleting unnecessary files.",
+                        "Reorganizing files stored on a disk to occupy contiguous storage locations.",
+                        "Encrypting files for security.",
+                        "Scanning for viruses."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q4.4b: What is 'Operating System Virtualization'?",
+                    options: [
+                        "Creating a backup of the OS.",
+                        "Running multiple instances of an OS (or different OSs) on a single physical machine.",
+                        "Updating the OS to the latest version.",
+                        "Hardening the OS against attacks."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q4.4c: What does 'Abandonware' refer to in software?",
+                    options: [
+                        "Software that is freely available for use.",
+                        "Software that is no longer supported or sold by its creator.",
+                        "A type of malicious software.",
+                        "Software currently in beta testing."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q4.4d: What is 'Operating System hardening'?",
+                    options: [
+                        "Making the OS run faster.",
+                        "The process of configuring an OS securely to reduce its vulnerability.",
+                        "Installing more features onto the OS.",
+                        "Creating a physical copy of the OS installation media."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q4.4e: What does 'Dual boot' allow a user to do?",
+                    options: [
+                        "Run two applications simultaneously.",
+                        "Install and choose between two different operating systems at startup.",
+                        "Connect two monitors to a computer.",
+                        "Boot the computer twice as fast."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q5.1: Besides LAN, WAN, MAN, and PAN, which of the following is another type of computer network?",
+                    options: [
+                        "CPU (Central Processing Unit)",
+                        "RAM (Random Access Memory)",
+                        "CAN (Campus Area Network) or SAN (Storage Area Network)",
+                        "GPU (Graphics Processing Unit)"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q5.2: What is a significant limitation of computer networking?",
+                    options: [
+                        "Ability to share resources.",
+                        "Security vulnerabilities and risks.",
+                        "Improved communication speed.",
+                        "Decentralized data storage."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q5.3: What is a key advantage of wireless networking over wired networking?",
+                    options: [
+                        "Generally higher maximum transmission speeds.",
+                        "Increased mobility and flexibility for devices.",
+                        "Lower susceptibility to interference.",
+                        "Simpler security setup."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q5.4: When setting up a hybrid computer network in an office, which hardware is essential?",
+                    options: [
+                        "A high-resolution monitor",
+                        "A router and/or switch",
+                        "A dedicated graphics card",
+                        "A powerful sound system"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q6.1: What was the significant technology underpinning 1st Generation Computers?",
+                    options: ["Transistors", "Integrated Circuits", "Vacuum Tubes", "Microprocessors"],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q6.2: 2nd Generation Computers were characterized by the use of:",
+                    options: ["Vacuum Tubes", "Transistors", "Microprocessors", "Artificial Intelligence"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q6.3: The hallmark of 3rd Generation Computers was the introduction of:",
+                    options: ["Integrated Circuits (ICs)", "The Internet", "Parallel Processing", "Magnetic Tape"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q6.4: 4th Generation Computers are primarily associated with the development of:",
+                    options: ["Punch Cards", "Assembly Language", "Microprocessors", "Electromechanical Relays"],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q7.1a: What is the key difference between 'Format Painter' and 'Conditional Formatting' in spreadsheet software?",
+                    options: [
+                        "Format Painter copies formatting, Conditional Formatting applies formats based on rules.",
+                        "Format Painter sets page layout, Conditional Formatting creates charts.",
+                        "Both are used exclusively for text color.",
+                        "Format Painter is for numbers, Conditional Formatting is for text."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q7.1b: In file operations, what distinguishes 'Save As' from 'Save'?",
+                    options: [
+                        "'Save' overwrites the current file; 'Save As' allows choosing a new name, location, or type.",
+                        "'Save As' is faster than 'Save'.",
+                        "'Save' creates a backup copy; 'Save As' does not.",
+                        "There is no difference; they perform the same action."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Q7.1c: What is the purpose of a 'Header' and 'Footer' in a document?",
+                    options: [
+                        "They are the main body text of the document.",
+                        "They are areas at the top (Header) and bottom (Footer) of pages for repetitive info like page numbers or titles.",
+                        "They are tools for checking grammar and spelling.",
+                        "They define the document's encryption settings."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q7.1d: What is a 'Hyperlink' primarily used for in a digital document?",
+                    options: [
+                        "To add a decorative image to the background.",
+                        "To create a clickable link to another document, webpage, or location.",
+                        "To check for plagiarism.",
+                        "To apply a consistent font style."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q7.1e: How do 'Subscript' and 'Superscript' differ in text formatting?",
+                    options: [
+                        "Subscript is larger text; Superscript is smaller.",
+                        "Subscript appears below the baseline; Superscript appears above.",
+                        "Subscript is bold; Superscript is italic.",
+                        "Subscript is for numbers; Superscript is for letters."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q7.2: Which of the following tools is particularly characteristic of MS Excel's advanced data analysis capabilities?",
+                    options: [
+                        "Spell Check",
+                        "PivotTables",
+                        "Font Formatting",
+                        "Saving a file"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q7.3a: What is the function of 'Ctrl + S' in most Windows OS applications?",
+                    options: ["Print the document", "Save the current file", "Open a new file", "Close the application"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q7.3b: What does 'Alt + F4' typically do in Windows OS?",
+                    options: ["Open File Explorer", "Refresh the screen", "Close the active window or application", "Switch to the next open application"],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q7.3c: What is the common use of 'Ctrl + Z' in Windows OS?",
+                    options: ["Redo the last action", "Undo the last action", "Cut selected content", "Copy selected content"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q7.3d: What does 'Ctrl + X' typically do?",
+                    options: ["Copy selected content", "Paste content from clipboard", "Cut selected content (remove and place on clipboard)", "Save the file"],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q7.3e: What is 'Ctrl + V' used for?",
+                    options: ["Verify content", "Paste content from clipboard", "View properties", "Select all content"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q7.3f: What is the action of 'Shift + Del' in Windows File Explorer?",
+                    options: ["Move selected file(s) to Recycle Bin", "Permanently delete selected file(s) without sending to Recycle Bin", "Rename selected file(s)", "Copy selected file(s)"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q7.3g: What does 'Ctrl + Shift + Esc' open in Windows OS?",
+                    options: ["Control Panel", "Command Prompt", "Task Manager", "System Settings"],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q7.3h: What is the function of 'Windows + M'?",
+                    options: ["Open My Computer", "Maximize all windows", "Minimize all open windows to show the desktop", "Open the Start Menu"],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Q7.3i: What does 'Windows + P' typically control?",
+                    options: ["Printer settings", "Projector/display presentation mode settings", "Power options", "Program uninstallation"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Q7.3j: In a text document or list, what does pressing the 'Home' key usually do?",
+                    options: ["Move the cursor to the end of the document", "Move the cursor to the beginning of the current line or document", "Open the home page in a web browser", "Save the document"],
+                    correctAnswer: 1
+                }
+            ];
+
+            let shuffledQuizData = []; // This array will hold the questions in a random order
+            let currentQuestionIndex = 0;
+            let score = 0;
+            let lives = 3;
+            let correctStreak = 0;
+            let correctAnswersCount = 0;
+            const pointsPerCorrectAnswer = 10;
+            const streakBonusPoints = 5;
+
+            // --- DOM Elements ---
+            const questionTextElement = document.getElementById('questionText');
+            const optionsContainerElement = document.getElementById('currentQuestion'); // This is the parent of options
+            const feedbackElement = document.getElementById('feedback');
+            const nextButton = document.getElementById('nextButton');
+            const livesContainer = document.querySelector('.lives');
+            const scoreDisplayElement = document.getElementById('scoreDisplay');
+            const progressBarElement = document.getElementById('progressBar');
+            const streakBonusElement = document.getElementById('streakBonus');
+            const quizEndElement = document.getElementById('quizEnd');
+            const finalScoreElement = document.getElementById('finalScore');
+            const correctAnswersElement = document.getElementById('correctAnswers');
+            const totalQuestionsElement = document.getElementById('totalQuestions');
+            const restartQuizButton = document.getElementById('restartQuiz');
+            const xpProgressElement = document.getElementById('xpProgress');
+            // --- End DOM Elements ---
+
+
+            // Helper function to get CSS variables (optional, used for feedback color)
+            function varCss(varName) {
+                return getComputedStyle(document.documentElement).getPropertyValue('--' + varName).trim();
+            }
+
+            // Fisher-Yates (Knuth) Shuffle function
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+                }
+                return array; // Return the shuffled array
+            }
+
+            // Update the display of lives (hearts)
+            function updateLivesDisplay() {
+                livesContainer.innerHTML = ''; // Clear current hearts
+                for (let i = 0; i < lives; i++) {
+                    const heartSpan = document.createElement('span');
+                    heartSpan.classList.add('heart');
+                    heartSpan.textContent = '❤'; // Use a heart character
+                    livesContainer.appendChild(heartSpan);
+                }
+            }
+
+            // Update the progress bar
+            function updateProgressBar() {
+                // Calculate progress based on the number of questions completed out of the total
+                const progressPercentage = (currentQuestionIndex / shuffledQuizData.length) * 100;
+                progressBarElement.style.width = `${progressPercentage}%`;
+            }
+
+            // Load the current question and its options
+            function loadQuestion() {
+                // Check if the quiz is over (either all questions answered or lives ran out)
+                if (currentQuestionIndex >= shuffledQuizData.length || lives <= 0) {
+                    endQuiz(); // Go to the end screen
+                    return;
+                }
+
+                // Remove any previously displayed option buttons
+                const existingOptions = optionsContainerElement.querySelectorAll('button.option');
+                existingOptions.forEach(button => button.remove());
+
+                // Reset feedback and bonus messages
+                feedbackElement.textContent = '';
+                feedbackElement.className = 'feedback'; // Reset feedback class
+                streakBonusElement.textContent = '';
+
+                // Disable the "Continue" button until an answer is selected
+                nextButton.disabled = true;
+
+                // Get the current question object from the shuffled data
+                const currentQuestion = shuffledQuizData[currentQuestionIndex];
+
+                // Display the question text
+                questionTextElement.textContent = currentQuestion.question;
+
+                // --- Shuffling Options Logic ---
+                // Create a copy of the options array to shuffle
+                const originalOptions = [...currentQuestion.options];
+                // Get the text of the correct answer based on the original index
+                const originalCorrectAnswerText = originalOptions[currentQuestion.correctAnswer];
+                // Shuffle the copied options array
+                const shuffledOptions = shuffleArray(originalOptions);
+                // Find the new index of the correct answer text within the shuffled array
+                const newCorrectAnswerIndex = shuffledOptions.indexOf(originalCorrectAnswerText);
+                // --- End Shuffling Options Logic ---
+
+
+                // Create and add buttons for each shuffled option
+                shuffledOptions.forEach((option, index) => { // Loop through the shuffled options
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.classList.add('option');
+                    button.textContent = option;
+                    // Add an event listener to the button
+                    // Pass the selected index (its position in the shuffled list)
+                    // and the new correct answer index for THIS specific question
+                    button.addEventListener('click', () => selectAnswer(index, newCorrectAnswerIndex, button));
+                    // Insert the button before the feedback elements
+                    optionsContainerElement.insertBefore(button, feedbackElement);
+                });
+
+                // Update the progress bar visually
+                updateProgressBar();
+            }
+
+            // Handle the user selecting an answer
+            function selectAnswer(selectedIndex, correctIndexForThisQuestion, selectedButton) {
+                // Get all the option buttons for the current question
+                const optionsButtons = optionsContainerElement.querySelectorAll('button.option');
+
+                // Disable all buttons after an answer is selected to prevent multiple clicks
+                optionsButtons.forEach(btn => btn.disabled = true);
+
+                // Check if the selected answer is the correct one using the new index
+                if (selectedIndex === correctIndexForThisQuestion) {
+                    selectedButton.classList.add('correct'); // Style the selected button as correct
+                    feedbackElement.textContent = 'Correct!';
+                    feedbackElement.style.color = varCss('duo-green-dark'); // Set feedback text color
+                    score += pointsPerCorrectAnswer; // Add base points
+                    correctStreak++; // Increase correct streak counter
+                    correctAnswersCount++; // Increment the count of correct answers
+
+                    // Apply streak bonus if the streak is longer than 1
+                    if (correctStreak > 1) {
+                        score += streakBonusPoints;
+                        streakBonusElement.textContent = `Streak Bonus! +${streakBonusPoints} XP`;
+                    }
+                    scoreDisplayElement.textContent = score; // Update the displayed score
+
+                } else {
+                    selectedButton.classList.add('incorrect'); // Style the selected button as incorrect
+                    feedbackElement.textContent = 'Wrong!';
+                    feedbackElement.style.color = varCss('duo-red-dark'); // Set feedback text color
+                    lives--; // Decrease lives
+                    updateLivesDisplay(); // Update the lives display
+                    correctStreak = 0; // Reset streak on incorrect answer
+                    streakBonusElement.textContent = ''; // Clear streak bonus message
+
+                    // Highlight the correct answer
+                    // Use the correctIndexForThisQuestion to find the button that holds the correct answer
+                    if (optionsButtons.length > correctIndexForThisQuestion && correctIndexForThisQuestion >= 0) { // Safety check
+                         optionsButtons[correctIndexForThisQuestion].classList.add('correct');
+                    }
+                }
+
+                // Enable the "Continue" button
+                nextButton.disabled = false;
+            }
+
+            // Move to the next question
+            function nextQuestion() {
+                currentQuestionIndex++; // Increment the question index
+                loadQuestion(); // Load the next question
+            }
+
+            // End the quiz and show the results screen
+            function endQuiz() {
+                 // Hide the question container and next button
+                 document.getElementById('questionContainer').style.display = 'none';
+                 nextButton.style.display = 'none';
+
+                 // Show the quiz end screen
+                 quizEndElement.style.display = 'flex';
+
+                 // Update the final score and correct answers display
+                 finalScoreElement.textContent = score;
+                 correctAnswersElement.textContent = correctAnswersCount;
+                 totalQuestionsElement.textContent = originalQuizData.length; // Show total number of questions
+
+                 // Animate the XP bar on the end screen
+                 // Calculate XP percentage based on potential score (simple version)
+                 const maxPossibleBaseScore = originalQuizData.length * pointsPerCorrectAnswer;
+                 // Avoid division by zero if no questions exist
+                 const xpPercentage = maxPossibleBaseScore > 0 ? Math.min(100, (score / maxPossibleBaseScore) * 100) : 0;
+
+                 xpProgressElement.style.width = `${xpPercentage}%`;
+                 xpProgressElement.textContent = `${Math.round(xpPercentage)}%`; // Display percentage rounded
+                 xpProgressElement.style.backgroundColor = score > 0 ? varCss('duo-yellow') : varCss('duo-grey-medium'); // Change bar color based on score
+            }
+
+            // Restart the quiz
+            function restartQuiz() {
+                // --- Shuffle questions again for a new game ---
+                shuffledQuizData = shuffleArray([...originalQuizData]); // Shuffle the original data again
+                // --- End shuffling ---
+
+                // Reset quiz variables
+                currentQuestionIndex = 0;
+                score = 0;
+                lives = 3;
+                correctStreak = 0;
+                correctAnswersCount = 0;
+
+                // Update score and lives display
+                scoreDisplayElement.textContent = score;
+                updateLivesDisplay();
+
+                // Hide the quiz end screen and show the question container and next button
+                quizEndElement.style.display = 'none';
+                document.getElementById('questionContainer').style.display = 'block';
+                nextButton.style.display = 'block';
+
+                // Reset progress bars
+                progressBarElement.style.width = '0%';
+                xpProgressElement.style.width = '0%';
+                xpProgressElement.textContent = '0%';
+                xpProgressElement.style.backgroundColor = varCss('duo-yellow'); // Reset bar color
+
+
+                loadQuestion(); // Load the first question from the newly shuffled data
+            }
+
+            // --- Event Listeners ---
+            nextButton.addEventListener('click', nextQuestion);
+            restartQuizButton.addEventListener('click', restartQuiz);
+            // --- End Event Listeners ---
+
+
+            // --- Initial Setup ---
+            // Shuffle questions when the page first loads
+            shuffledQuizData = shuffleArray([...originalQuizData]);
+            updateLivesDisplay(); // Display initial lives
+            loadQuestion(); // Load the first question
+            // --- End Initial Setup ---
+
+        });
+    </script>
+</body>
+</html>
